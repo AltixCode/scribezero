@@ -8,17 +8,24 @@
     "scheme": "scribezero",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#020617"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.hushtunnel.scribezero",
+      "buildNumber": "1",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "ScribeZero needs microphone access to record audio memos for on-device transcription."
       }
     },
     "android": {
       "package": "com.hushtunnel.scribezero",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#0F172A",
+        "backgroundColor": "#020617",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
