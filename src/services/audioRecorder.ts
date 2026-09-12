@@ -1,11 +1,18 @@
-import { Audio } from 'expo-av';
+import {
+  AudioModule,
+  AudioRecorder,
+  RecordingPresets,
+  requestRecordingPermissionsAsync,
+  setAudioModeAsync,
+} from 'expo-audio';
 
-let recordingInstance: Audio.Recording | null = null;
+let recorderInstance: AudioRecorder | null = null;
+let meteringInterval: ReturnType<typeof setInterval> | null = null;
 
 export const requestMicrophonePermission = async (): Promise<boolean> => {
   try {
-    const { status } = await Audio.requestPermissionsAsync();
-    return status === 'granted';
+    const { granted } = await requestRecordingPermissionsAsync();
+    return granted;
   } catch {
     return false;
   }
@@ -18,28 +25,39 @@ export const startRecordingAudio = async (
     const granted = await requestMicrophonePermission();
     if (!granted) return false;
 
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      playsInSilentModeIOS: true,
+    await setAudioModeAsync({
+      allowsRecording: true,
+      playsInSilentMode: true,
     });
 
-    const recording = new Audio.Recording();
-    await recording.prepareToRecordAsync({
-      ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
+    const recordingOptions = {
+      ...RecordingPresets.HIGH_QUALITY,
       isMeteringEnabled: true,
-    });
+    };
+
+    const recorder = new AudioModule.AudioRecorder(recordingOptions);
+    await recorder.prepareToRecordAsync();
+    recorder.record();
+    recorderInstance = recorder;
 
     if (onMeteringUpdate) {
-      recording.setOnRecordingStatusUpdate((status) => {
-        if (status.metering !== undefined) {
-          onMeteringUpdate(status.metering);
+      if (meteringInterval) {
+        clearInterval(meteringInterval);
+      }
+      meteringInterval = setInterval(() => {
+        if (recorderInstance) {
+          try {
+            const status = recorderInstance.getStatus();
+            if (status.metering !== undefined) {
+              onMeteringUpdate(status.metering);
+            }
+          } catch {
+            // ignore status query errors during transition
+          }
         }
-      });
-      recording.setProgressUpdateInterval(100);
+      }, 100);
     }
 
-    await recording.startAsync();
-    recordingInstance = recording;
     return true;
   } catch (err) {
     console.error('Failed to start recording:', err);
@@ -49,13 +67,18 @@ export const startRecordingAudio = async (
 
 export const stopRecordingAudio = async (): Promise<string | null> => {
   try {
-    if (!recordingInstance) return null;
-    await recordingInstance.stopAndUnloadAsync();
-    const uri = recordingInstance.getURI();
-    recordingInstance = null;
+    if (meteringInterval) {
+      clearInterval(meteringInterval);
+      meteringInterval = null;
+    }
 
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
+    if (!recorderInstance) return null;
+    await recorderInstance.stop();
+    const uri = recorderInstance.uri;
+    recorderInstance = null;
+
+    await setAudioModeAsync({
+      allowsRecording: false,
     });
 
     return uri;
@@ -64,3 +87,4 @@ export const stopRecordingAudio = async (): Promise<string | null> => {
     return null;
   }
 };
+
