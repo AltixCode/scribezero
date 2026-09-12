@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.hushtunnel.scribezero",
+      "bundleIdentifier": "com.altixcode.scribezero",
       "buildNumber": "1",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "ScribeZero needs microphone access to record audio memos for on-device transcription."
       }
     },
     "android": {
-      "package": "com.hushtunnel.scribezero",
+      "package": "com.altixcode.scribezero",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#020617",

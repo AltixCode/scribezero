@@ -8,7 +8,7 @@
 
 ### Completed Tasks
 * [x] Initialized Expo SDK 57+ repository with TypeScript template
-* [x] Configured bundle IDs (`com.hushtunnel.scribezero`) and permissions in `app.json`
+* [x] Configured bundle IDs (`com.altixcode.scribezero`) and permissions in `app.json`
 * [x] Configured NativeWind v4, Tailwind CSS, and Metro config
 * [x] Implemented universal RevenueCat module in `src/services/purchases.ts` ($7.99 Lifetime Pro)
 * [x] Implemented 16kHz audio recorder with dynamic metering in `src/services/audioRecorder.ts`
