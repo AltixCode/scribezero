@@ -19,6 +19,7 @@ import { startRecordingAudio, stopRecordingAudio } from '../src/services/audioRe
 import { transcribeAudio } from '../src/engine/whisperEngine';
 import { WaveformVisualizer } from '../src/components/WaveformVisualizer';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 const formatSeconds = (sec: number): string => {
@@ -29,6 +30,7 @@ const formatSeconds = (sec: number): string => {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const {
     isRecording,
     recordingDuration,
@@ -126,40 +128,57 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-slate-950 px-5">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background }} className="px-5">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
         {/* Hero Section */}
         <View className="mt-4 mb-4">
-          <View className="inline-flex self-start bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full mb-3 flex-row items-center">
-            <Sparkles size={12} color="#38BDF8" />
-            <Text className="text-cyan-400 text-xs font-semibold ml-1.5">
+          <View
+            style={{
+              backgroundColor: theme.accentLight,
+              borderColor: theme.accentBorder,
+            }}
+            className="self-start border px-3 py-1 rounded-full mb-3 flex-row items-center"
+          >
+            <Sparkles size={13} color={theme.accent} />
+            <Text style={{ color: theme.accent }} className="text-xs font-semibold ml-1.5">
               {t('heroBadge')}
             </Text>
           </View>
-          <Text className="text-3xl font-extrabold text-white tracking-tight">
+          <Text style={{ color: theme.text }} className="text-3xl font-extrabold tracking-tight">
             {t('heroTitle')}
           </Text>
-          <Text className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+          <Text style={{ color: theme.textSecondary }} className="text-sm mt-1.5 leading-relaxed">
             {t('heroSubtitle')}
           </Text>
         </View>
 
         {/* Big Record Button & Audio Waveform Card */}
-        <View className="bg-slate-900 border border-slate-800 rounded-3xl p-6 items-center mb-5 relative">
+        <View
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+          }}
+          className="border rounded-3xl p-6 items-center mb-5 relative shadow-sm"
+        >
           <WaveformVisualizer isRecording={isRecording} meteringLevel={meteringLevel} />
 
-          <Text className="text-3xl font-mono font-extrabold text-white my-3">
+          <Text style={{ color: theme.text }} className="text-3xl font-mono font-extrabold my-3">
             {formatSeconds(recordingDuration)}
           </Text>
 
           <TouchableOpacity
             onPress={handleToggleRecord}
             activeOpacity={0.8}
-            className={`w-20 h-20 rounded-full items-center justify-center shadow-xl ${
-              isRecording
-                ? 'bg-rose-600 shadow-rose-600/40'
-                : 'bg-cyan-600 shadow-cyan-600/40'
-            }`}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            style={{
+              backgroundColor: isRecording ? '#E11D48' : theme.primary,
+              shadowColor: isRecording ? '#E11D48' : theme.primary,
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.35,
+              shadowRadius: 10,
+              elevation: 8,
+            }}
+            className="w-20 h-20 rounded-full items-center justify-center"
           >
             {isRecording ? (
               <Square size={26} color="#FFFFFF" fill="#FFFFFF" />
@@ -168,7 +187,7 @@ export default function HomeScreen() {
             )}
           </TouchableOpacity>
 
-          <Text className="text-slate-400 text-xs mt-3">
+          <Text style={{ color: theme.textMuted }} className="text-xs mt-3 font-medium">
             {isRecording ? t('tapToStop') : t('tapToStart')}
           </Text>
         </View>
@@ -177,43 +196,59 @@ export default function HomeScreen() {
         <TouchableOpacity
           onPress={() => router.push('/import')}
           activeOpacity={0.8}
-          className="bg-slate-900 border border-slate-800 p-4 rounded-2xl mb-5 flex-row items-center justify-between"
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+          }}
+          className="border p-4 rounded-2xl mb-5 flex-row items-center justify-between"
         >
           <View className="flex-row items-center flex-1 mr-3">
-            <View className="bg-blue-500/15 p-2.5 rounded-xl mr-3">
-              <Upload size={18} color="#60A5FA" />
+            <View
+              style={{ backgroundColor: theme.primaryLight }}
+              className="p-2.5 rounded-xl mr-3"
+            >
+              <Upload size={18} color={theme.primary} />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">{t('importAudioPrompt')}</Text>
-              <Text className="text-slate-400 text-xs mt-0.5">
+              <Text style={{ color: theme.text }} className="font-bold text-sm">
+                {t('importAudioPrompt')}
+              </Text>
+              <Text style={{ color: theme.textSecondary }} className="text-xs mt-0.5">
                 {t('importAudioDesc')}
               </Text>
             </View>
           </View>
-          <ArrowRight size={16} color="#94A3B8" />
+          <ArrowRight size={16} color={theme.textMuted} />
         </TouchableOpacity>
 
         {/* Saved Recordings List */}
-        <Text className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+        <Text style={{ color: theme.textMuted }} className="text-xs font-bold uppercase tracking-wider mb-3">
           {t('voiceMemos', { count: recordings.length })}
         </Text>
 
         {recordings.length > 0 ? (
-          <View className="space-y-3 mb-6">
+          <View className="mb-6">
             {recordings.map((rec) => (
               <View
                 key={rec.id}
-                className="bg-slate-900 border border-slate-800 p-4 rounded-2xl mb-3 flex-row items-center justify-between"
+                style={{
+                  backgroundColor: theme.card,
+                  borderColor: theme.cardBorder,
+                }}
+                className="border p-4 rounded-2xl mb-3 flex-row items-center justify-between shadow-sm"
               >
                 <View className="flex-row items-center flex-1 mr-3">
-                  <View className="bg-cyan-500/20 p-2.5 rounded-xl mr-3">
-                    <FileAudio size={20} color="#38BDF8" />
+                  <View
+                    style={{ backgroundColor: theme.accentLight }}
+                    className="p-2.5 rounded-xl mr-3"
+                  >
+                    <FileAudio size={20} color={theme.accent} />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-white font-bold text-sm" numberOfLines={1}>
+                    <Text style={{ color: theme.text }} className="font-bold text-sm" numberOfLines={1}>
                       {rec.title}
                     </Text>
-                    <Text className="text-slate-400 text-xs mt-0.5">
+                    <Text style={{ color: theme.textSecondary }} className="text-xs mt-0.5 font-medium">
                       {formatSeconds(rec.duration)} • {new Date(rec.createdAt).toLocaleDateString()}
                     </Text>
                   </View>
@@ -223,7 +258,9 @@ export default function HomeScreen() {
                   <TouchableOpacity
                     onPress={() => handleTranscribe(rec)}
                     disabled={transcribingId === rec.id}
-                    className="bg-cyan-600 px-3 py-1.5 rounded-xl flex-row items-center mr-1"
+                    hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                    style={{ backgroundColor: theme.primary }}
+                    className="px-3.5 py-2 rounded-xl flex-row items-center mr-1.5"
                   >
                     {transcribingId === rec.id ? (
                       <ActivityIndicator size="small" color="#FFFFFF" />
@@ -240,17 +277,25 @@ export default function HomeScreen() {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       deleteRecording(rec.id);
                     }}
-                    className="p-1.5 rounded-lg bg-slate-800"
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    style={{ backgroundColor: theme.isDark ? '#1E293B' : '#F1F5F9' }}
+                    className="p-2 rounded-lg"
                   >
-                    <Trash2 size={14} color="#EF4444" />
+                    <Trash2 size={15} color={theme.danger} />
                   </TouchableOpacity>
                 </View>
               </View>
             ))}
           </View>
         ) : (
-          <View className="bg-slate-900/40 border border-dashed border-slate-800 rounded-3xl p-6 items-center justify-center mb-6">
-            <Text className="text-slate-400 text-xs text-center">
+          <View
+            style={{
+              backgroundColor: theme.isDark ? 'rgba(15, 23, 42, 0.4)' : '#FFFFFF',
+              borderColor: theme.cardBorder,
+            }}
+            className="border border-dashed rounded-3xl p-6 items-center justify-center mb-6"
+          >
+            <Text style={{ color: theme.textMuted }} className="text-xs text-center font-medium">
               {t('noVoiceMemos')}
             </Text>
           </View>
@@ -258,29 +303,41 @@ export default function HomeScreen() {
 
         {/* Privacy & Architectural Guarantees */}
         <View className="space-y-3">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+          <Text style={{ color: theme.textMuted }} className="text-xs font-bold uppercase tracking-wider mb-2">
             {t('localMl')}
           </Text>
 
-          <View className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex-row items-start mb-3">
-            <View className="bg-cyan-500/10 p-2 rounded-xl mr-3">
-              <Cpu size={18} color="#38BDF8" />
+          <View
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+            }}
+            className="border p-4 rounded-2xl flex-row items-start mb-3 shadow-sm"
+          >
+            <View style={{ backgroundColor: theme.accentLight }} className="p-2 rounded-xl mr-3">
+              <Cpu size={18} color={theme.accent} />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">{t('neuralEngine')}</Text>
-              <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+              <Text style={{ color: theme.text }} className="font-bold text-sm">{t('neuralEngine')}</Text>
+              <Text style={{ color: theme.textSecondary }} className="text-xs mt-0.5 leading-relaxed">
                 {t('neuralEngineDesc')}
               </Text>
             </View>
           </View>
 
-          <View className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex-row items-start">
-            <View className="bg-emerald-500/10 p-2 rounded-xl mr-3">
-              <ShieldCheck size={18} color="#34D399" />
+          <View
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.cardBorder,
+            }}
+            className="border p-4 rounded-2xl flex-row items-start shadow-sm"
+          >
+            <View style={{ backgroundColor: theme.successLight }} className="p-2 rounded-xl mr-3">
+              <ShieldCheck size={18} color={theme.success} />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">{t('zeroServerUploads')}</Text>
-              <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+              <Text style={{ color: theme.text }} className="font-bold text-sm">{t('zeroServerUploads')}</Text>
+              <Text style={{ color: theme.textSecondary }} className="text-xs mt-0.5 leading-relaxed">
                 {t('zeroServerUploadsDesc')}
               </Text>
             </View>

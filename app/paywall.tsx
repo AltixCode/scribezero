@@ -13,10 +13,12 @@ import {
 } from 'lucide-react-native';
 import { useAudioStore } from '../src/store/useAudioStore';
 import { purchaseLifetime, restorePurchases } from '../src/services/purchases';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function PaywallScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const { setIsPro } = useAudioStore();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export default function PaywallScreen() {
 
   const features = [
     {
-      icon: <InfinityIcon size={20} color="#38BDF8" />,
+      icon: <InfinityIcon size={20} color={theme.accent} />,
       title: t('feat1Title'),
       desc: t('feat1Desc'),
     },
@@ -73,45 +75,61 @@ export default function PaywallScreen() {
       desc: t('feat2Desc'),
     },
     {
-      icon: <FileText size={20} color="#F59E0B" />,
+      icon: <FileText size={20} color={theme.warning} />,
       title: t('feat3Title'),
       desc: t('feat3Desc'),
     },
     {
-      icon: <ShieldCheck size={20} color="#10B981" />,
+      icon: <ShieldCheck size={20} color={theme.success} />,
       title: t('feat4Title'),
       desc: t('feat4Desc'),
     },
   ];
 
   return (
-    <View className="flex-1 bg-slate-950 px-6 py-4">
+    <View style={{ flex: 1, backgroundColor: theme.background }} className="px-6 py-4">
       {/* Top Header */}
       <View className="flex-row items-center justify-between mt-2 mb-4">
         <View className="flex-row items-center">
-          <View className="bg-cyan-500/20 p-2 rounded-xl mr-2.5">
-            <Sparkles size={20} color="#38BDF8" />
+          <View
+            style={{
+              backgroundColor: theme.accentLight,
+              borderColor: theme.accentBorder,
+            }}
+            className="border p-2 rounded-xl mr-2.5"
+          >
+            <Sparkles size={20} color={theme.accent} />
           </View>
-          <Text className="text-xl font-extrabold text-white">{t('paywallTitle')}</Text>
+          <Text style={{ color: theme.text }} className="text-xl font-extrabold">{t('paywallTitle')}</Text>
         </View>
         <TouchableOpacity
           onPress={() => router.back()}
-          className="bg-slate-900 p-2 rounded-full"
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          style={{
+            backgroundColor: theme.isDark ? '#1E293B' : '#F1F5F9',
+          }}
+          className="p-2 rounded-full"
         >
-          <X size={18} color="#94A3B8" />
+          <X size={18} color={theme.textSecondary} />
         </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
         {/* Anti-Subscription Card */}
-        <View className="bg-gradient-to-br from-cyan-950/80 to-slate-900 border border-cyan-900/60 p-5 rounded-2xl mb-6">
-          <Text className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">
+        <View
+          style={{
+            backgroundColor: theme.accentLight,
+            borderColor: theme.accentBorder,
+          }}
+          className="border p-5 rounded-2xl mb-6 shadow-sm"
+        >
+          <Text style={{ color: theme.accent }} className="text-xs font-bold uppercase tracking-wider mb-1">
             {t('antiSubTitle')}
           </Text>
-          <Text className="text-base font-bold text-white leading-snug">
+          <Text style={{ color: theme.text }} className="text-base font-bold leading-snug">
             {t('antiSubHeadline')}
           </Text>
-          <Text className="text-slate-400 text-xs mt-2 leading-relaxed">
+          <Text style={{ color: theme.textSecondary }} className="text-xs mt-2 leading-relaxed">
             {t('antiSubDesc')}
           </Text>
         </View>
@@ -120,19 +138,25 @@ export default function PaywallScreen() {
         <View className="space-y-4 mb-6">
           {features.map((f, i) => (
             <View key={i} className="flex-row items-start mb-4">
-              <View className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 mr-3.5">
+              <View
+                style={{
+                  backgroundColor: theme.card,
+                  borderColor: theme.cardBorder,
+                }}
+                className="p-2.5 rounded-xl border mr-3.5 shadow-sm"
+              >
                 {f.icon}
               </View>
               <View className="flex-1">
-                <Text className="text-white text-sm font-bold">{f.title}</Text>
-                <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">{f.desc}</Text>
+                <Text style={{ color: theme.text }} className="text-sm font-bold">{f.title}</Text>
+                <Text style={{ color: theme.textSecondary }} className="text-xs mt-0.5 leading-relaxed">{f.desc}</Text>
               </View>
             </View>
           ))}
         </View>
 
         {errorMsg && (
-          <Text className="text-red-400 text-xs text-center mb-3">{errorMsg}</Text>
+          <Text style={{ color: theme.danger }} className="text-xs text-center mb-3">{errorMsg}</Text>
         )}
       </ScrollView>
 
@@ -142,7 +166,16 @@ export default function PaywallScreen() {
           onPress={handlePurchase}
           disabled={loading}
           activeOpacity={0.85}
-          className="bg-cyan-600 active:bg-cyan-500 p-4 rounded-2xl items-center flex-row justify-center shadow-lg shadow-cyan-500/25"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          style={{
+            backgroundColor: theme.primary,
+            shadowColor: theme.primary,
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.35,
+            shadowRadius: 10,
+            elevation: 6,
+          }}
+          className="p-4 rounded-2xl items-center flex-row justify-center min-h-[52px]"
         >
           {loading ? (
             <ActivityIndicator color="#FFFFFF" />
@@ -157,11 +190,19 @@ export default function PaywallScreen() {
         </TouchableOpacity>
 
         <View className="flex-row items-center justify-center space-x-6 mt-4">
-          <TouchableOpacity onPress={handleRestore} disabled={loading}>
-            <Text className="text-slate-400 text-xs underline">{t('restorePurchases')}</Text>
+          <TouchableOpacity
+            onPress={handleRestore}
+            disabled={loading}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={{ color: theme.textSecondary }} className="text-xs underline font-medium">
+              {t('restorePurchases')}
+            </Text>
           </TouchableOpacity>
-          <Text className="text-slate-600 text-xs">•</Text>
-          <Text className="text-slate-500 text-xs">{t('oneTimePayment')}</Text>
+          <Text style={{ color: theme.textMuted }} className="text-xs">•</Text>
+          <Text style={{ color: theme.textMuted }} className="text-xs font-medium">
+            {t('oneTimePayment')}
+          </Text>
         </View>
       </View>
     </View>

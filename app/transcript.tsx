@@ -4,10 +4,8 @@ import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import {
-  Share2,
   FileText,
   FileCode,
-  Sparkles,
   Subtitles,
   Copy,
   Check,
@@ -20,10 +18,12 @@ import {
 } from '../src/engine/exportEngine';
 import { TranscriptSegmentCard } from '../src/components/TranscriptSegmentCard';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
 
 export default function TranscriptScreen() {
   const router = useRouter();
+  const theme = useTheme();
   const { currentTranscript, activeRecordingTitle, isPro } = useAudioStore();
 
   const [copied, setCopied] = useState(false);
@@ -91,31 +91,41 @@ export default function TranscriptScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 py-3">
+    <View style={{ flex: 1, backgroundColor: theme.background }} className="px-5 py-3">
       {/* Header Info */}
-      <View className="bg-slate-900 border border-slate-800 p-4 rounded-2xl mb-4 flex-row items-center justify-between">
+      <View
+        style={{
+          backgroundColor: theme.card,
+          borderColor: theme.cardBorder,
+        }}
+        className="border p-4 rounded-2xl mb-4 flex-row items-center justify-between shadow-sm"
+      >
         <View className="flex-1 mr-3">
-          <Text className="text-white font-bold text-base" numberOfLines={1}>
+          <Text style={{ color: theme.text }} className="font-bold text-base" numberOfLines={1}>
             {activeRecordingTitle}
           </Text>
-          <Text className="text-cyan-400 text-xs font-mono mt-0.5">
+          <Text style={{ color: theme.accent }} className="text-xs font-mono mt-0.5 font-semibold">
             {t('modelWhisper', { model: currentTranscript.modelUsed.toUpperCase() })}
           </Text>
         </View>
 
         <TouchableOpacity
           onPress={handleCopy}
-          className="bg-slate-800 px-3 py-2 rounded-xl flex-row items-center"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          style={{
+            backgroundColor: theme.isDark ? '#1E293B' : '#F1F5F9',
+          }}
+          className="px-3.5 py-2 rounded-xl flex-row items-center"
         >
           {copied ? (
             <>
-              <Check size={14} color="#34D399" />
-              <Text className="text-emerald-400 text-xs font-bold ml-1">{t('copied')}</Text>
+              <Check size={14} color={theme.success} />
+              <Text style={{ color: theme.success }} className="text-xs font-bold ml-1.5">{t('copied')}</Text>
             </>
           ) : (
             <>
-              <Copy size={14} color="#94A3B8" />
-              <Text className="text-slate-300 text-xs font-bold ml-1">{t('copy')}</Text>
+              <Copy size={14} color={theme.textSecondary} />
+              <Text style={{ color: theme.textSecondary }} className="text-xs font-bold ml-1.5">{t('copy')}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -125,33 +135,56 @@ export default function TranscriptScreen() {
       <View className="flex-row space-x-2 mb-4">
         <TouchableOpacity
           onPress={handleExportText}
-          className="flex-1 bg-slate-900 border border-slate-800 py-2.5 rounded-xl items-center flex-row justify-center mr-1"
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+          }}
+          className="flex-1 border py-3 rounded-xl items-center flex-row justify-center mr-1 shadow-sm"
         >
-          <FileText size={14} color="#38BDF8" />
-          <Text className="text-slate-200 text-xs font-bold ml-1.5">.TXT</Text>
+          <FileText size={15} color={theme.primary} />
+          <Text style={{ color: theme.text }} className="text-xs font-bold ml-1.5">.TXT</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleExportMarkdown}
-          className="flex-1 bg-slate-900 border border-slate-800 py-2.5 rounded-xl items-center flex-row justify-center mx-1"
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+          }}
+          className="flex-1 border py-3 rounded-xl items-center flex-row justify-center mx-1 shadow-sm"
         >
-          <FileCode size={14} color="#C084FC" />
-          <Text className="text-slate-200 text-xs font-bold ml-1.5">.MD</Text>
-          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">{t('proBadge')}</Text>}
+          <FileCode size={15} color="#A855F7" />
+          <Text style={{ color: theme.text }} className="text-xs font-bold ml-1.5">.MD</Text>
+          {!isPro && (
+            <Text style={{ color: theme.warning }} className="text-[10px] font-extrabold ml-1">
+              {t('proBadge')}
+            </Text>
+          )}
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleExportSrt}
-          className="flex-1 bg-slate-900 border border-slate-800 py-2.5 rounded-xl items-center flex-row justify-center ml-1"
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.cardBorder,
+          }}
+          className="flex-1 border py-3 rounded-xl items-center flex-row justify-center ml-1 shadow-sm"
         >
-          <Subtitles size={14} color="#FBBF24" />
-          <Text className="text-slate-200 text-xs font-bold ml-1.5">.SRT</Text>
-          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">{t('proBadge')}</Text>}
+          <Subtitles size={15} color={theme.warning} />
+          <Text style={{ color: theme.text }} className="text-xs font-bold ml-1.5">.SRT</Text>
+          {!isPro && (
+            <Text style={{ color: theme.warning }} className="text-[10px] font-extrabold ml-1">
+              {t('proBadge')}
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
 
       {/* Timestamped Segments List */}
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 36 }}>
         {currentTranscript.segments.map((seg) => (
           <TranscriptSegmentCard key={seg.id} segment={seg} />
         ))}

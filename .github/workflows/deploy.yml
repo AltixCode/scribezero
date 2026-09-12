@@ -119,6 +119,7 @@ jobs:
               -authenticationKeyPath "$AUTH_KEY" \
               -authenticationKeyID "NGDJQCGYXQ" \
               -authenticationKeyIssuerID "c7e17516-b80c-42fe-a192-229b4cee0a48" \
+              CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLE=NO \
               DEVELOPMENT_TEAM="8Q8Y559285"
           else
@@ -130,6 +131,7 @@ jobs:
               -destination "generic/platform=iOS" \
               -archivePath "build/${SCHEME}.xcarchive" \
               -derivedDataPath "build/DerivedData" \
+              CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLE=NO \
               DEVELOPMENT_TEAM="8Q8Y559285"
           fi
@@ -154,6 +156,9 @@ jobs:
           </dict>
           </plist>
           PLIST_EOF
+
+          security default-keychain -s "$HOME/Library/Keychains/login.keychain-db" 2>/dev/null || true
+          security unlock-keychain -p "" "$HOME/Library/Keychains/login.keychain-db" 2>/dev/null || true
 
           if [ -f "$AUTH_KEY" ]; then
             xcodebuild -exportArchive \
