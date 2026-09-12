@@ -7,6 +7,7 @@ import { Upload, FileAudio, Sparkles, Lock, ArrowLeft } from 'lucide-react-nativ
 import { useAudioStore } from '../src/store/useAudioStore';
 import { transcribeAudio } from '../src/engine/whisperEngine';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { t } from '../src/i18n';
 
 export default function ImportScreen() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function ImportScreen() {
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const asset = result.assets[0];
         setLoading(true);
-        setActiveRecordingTitle(asset.name || 'Imported Audio');
+        setActiveRecordingTitle(asset.name || t('importedAudio'));
 
         const transcriptResult = await transcribeAudio(asset.uri, model);
         setCurrentTranscript(transcriptResult);
@@ -40,7 +41,7 @@ export default function ImportScreen() {
         router.replace('/transcript');
       }
     } catch {
-      Alert.alert('Import Error', 'Failed to read external audio file.');
+      Alert.alert(t('importError'), t('importErrorDesc'));
     } finally {
       setLoading(false);
     }
@@ -51,9 +52,9 @@ export default function ImportScreen() {
       {loading ? (
         <View className="items-center">
           <ActivityIndicator size="large" color="#38BDF8" className="mb-4" />
-          <Text className="text-white font-bold text-base">Transcribing with Whisper Neural Model</Text>
+          <Text className="text-white font-bold text-base">{t('transcribingWhisper')}</Text>
           <Text className="text-slate-400 text-xs text-center mt-1 max-w-xs">
-            Running 16kHz mono tensor passes locally on your device hardware...
+            {t('transcribingWhisperDesc')}
           </Text>
         </View>
       ) : (
@@ -63,19 +64,18 @@ export default function ImportScreen() {
           </View>
 
           <Text className="text-2xl font-extrabold text-white text-center mb-2">
-            Import External Audio
+            {t('importAudioTitle')}
           </Text>
           <Text className="text-slate-400 text-xs text-center max-w-xs leading-relaxed mb-8">
-            Supports .mp3, .m4a, and .wav files. Process recorded lectures, zoom audio, and podcast
-            tracks offline.
+            {t('importAudioLongDesc')}
           </Text>
 
           {!isPro && (
             <View className="bg-amber-950/40 border border-amber-500/30 p-4 rounded-2xl w-full mb-6 flex-row items-center justify-between">
               <View className="flex-1 mr-3">
-                <Text className="text-amber-300 font-bold text-xs">Pro Feature</Text>
+                <Text className="text-amber-300 font-bold text-xs">{t('proFeature')}</Text>
                 <Text className="text-amber-200/70 text-[10px] mt-0.5">
-                  External audio imports require ScribeZero Pro.
+                  {t('proFeatureDesc')}
                 </Text>
               </View>
               <TouchableOpacity
@@ -83,7 +83,7 @@ export default function ImportScreen() {
                 className="bg-amber-500/20 px-3 py-1.5 rounded-lg border border-amber-500/30 flex-row items-center"
               >
                 <Lock size={12} color="#F59E0B" />
-                <Text className="text-amber-400 text-xs font-bold ml-1">Unlock ($7.99)</Text>
+                <Text className="text-amber-400 text-xs font-bold ml-1">{t('unlockPro')}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -94,7 +94,7 @@ export default function ImportScreen() {
             className="w-full bg-cyan-600 active:bg-cyan-500 py-4 rounded-2xl flex-row items-center justify-center shadow-lg shadow-cyan-500/20 mb-4"
           >
             <Upload size={18} color="#FFFFFF" />
-            <Text className="text-white font-bold text-base ml-2">Select Audio File</Text>
+            <Text className="text-white font-bold text-base ml-2">{t('selectAudioFile')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -102,7 +102,7 @@ export default function ImportScreen() {
             className="py-2.5 flex-row items-center"
           >
             <ArrowLeft size={14} color="#94A3B8" />
-            <Text className="text-slate-400 text-xs font-semibold ml-1.5">Back to Voice Memos</Text>
+            <Text className="text-slate-400 text-xs font-semibold ml-1.5">{t('back')}</Text>
           </TouchableOpacity>
         </View>
       )}

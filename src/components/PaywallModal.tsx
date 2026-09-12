@@ -19,6 +19,7 @@ import {
 } from 'lucide-react-native';
 import { useAudioStore } from '../store/useAudioStore';
 import { purchaseLifetime, restorePurchases } from '../services/purchases';
+import { t } from '../i18n';
 
 interface PaywallModalProps {
   visible: boolean;
@@ -41,10 +42,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         onClose();
       } else {
-        setErrorMsg('Purchase was canceled or could not be completed.');
+        setErrorMsg(t('purchaseError'));
       }
     } catch {
-      setErrorMsg('An unexpected payment error occurred.');
+      setErrorMsg(t('unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -61,10 +62,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         onClose();
       } else {
-        setErrorMsg('No prior purchases found to restore.');
+        setErrorMsg(t('noPriorPurchases'));
       }
     } catch {
-      setErrorMsg('Failed to restore purchases.');
+      setErrorMsg(t('restoreError'));
     } finally {
       setLoading(false);
     }
@@ -73,23 +74,23 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
   const features = [
     {
       icon: <InfinityIcon size={20} color="#38BDF8" />,
-      title: 'Unlimited Recording Length',
-      desc: 'Transcribe 1-hour lectures, board meetings, and long interviews without time caps.',
+      title: t('feat1Title'),
+      desc: t('feat1Desc'),
     },
     {
       icon: <FileAudio size={20} color="#A855F7" />,
-      title: 'Audio File Imports',
-      desc: 'Transcribe external audio files (.mp3, .m4a, .wav) downloaded from any app.',
+      title: t('feat2Title'),
+      desc: t('feat2Desc'),
     },
     {
       icon: <FileText size={20} color="#F59E0B" />,
-      title: 'SRT Subtitles & Markdown Export',
-      desc: 'Export time-aligned SubRip (.srt) subtitle files and formatted Markdown notes.',
+      title: t('feat3Title'),
+      desc: t('feat3Desc'),
     },
     {
       icon: <ShieldCheck size={20} color="#10B981" />,
-      title: '100% Private On-Device',
-      desc: 'Whisper runs on your phone hardware. Zero voice data is ever uploaded.',
+      title: t('feat4Title'),
+      desc: t('feat4Desc'),
     },
   ];
 
@@ -103,7 +104,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
               <View className="bg-cyan-500/20 p-2 rounded-xl">
                 <Sparkles size={20} color="#38BDF8" />
               </View>
-              <Text className="text-xl font-extrabold text-white ml-2">ScribeZero Pro</Text>
+              <Text className="text-xl font-extrabold text-white ml-2">{t('paywallTitle')}</Text>
             </View>
             <TouchableOpacity
               onPress={onClose}
@@ -117,10 +118,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           {/* Anti-Subscription Banner */}
           <View className="bg-gradient-to-r from-cyan-950 to-slate-900 border border-cyan-900/60 p-4 rounded-2xl mb-5">
             <Text className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">
-              Anti-Subscription Promise
+              {t('antiSubTitle')}
             </Text>
             <Text className="text-sm font-semibold text-slate-100 leading-snug">
-              No Subscriptions. No Accounts. 100% On-Device Privacy. Own It Forever.
+              {t('antiSubHeadline')}
             </Text>
           </View>
 
@@ -155,7 +156,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
             ) : (
               <>
                 <Text className="text-white font-extrabold text-base mr-2">
-                  Unlock Lifetime Access — $7.99
+                  {t('lifetimeAccess')}
                 </Text>
                 <Check size={18} color="#FFFFFF" strokeWidth={3} />
               </>
@@ -165,10 +166,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           {/* Restore & Policy Links */}
           <View className="flex-row items-center justify-center space-x-6 mt-4">
             <TouchableOpacity onPress={handleRestore} disabled={loading}>
-              <Text className="text-slate-400 text-xs underline">Restore Purchases</Text>
+              <Text className="text-slate-400 text-xs underline">{t('restorePurchases')}</Text>
             </TouchableOpacity>
             <Text className="text-slate-600 text-xs">•</Text>
-            <Text className="text-slate-500 text-xs">One-time payment. Never recurring.</Text>
+            <Text className="text-slate-500 text-xs">{t('oneTimePayment')}</Text>
           </View>
         </View>
       </View>

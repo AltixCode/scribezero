@@ -20,6 +20,7 @@ import {
 } from '../src/engine/exportEngine';
 import { TranscriptSegmentCard } from '../src/components/TranscriptSegmentCard';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { t } from '../src/i18n';
 
 export default function TranscriptScreen() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function TranscriptScreen() {
         await Sharing.shareAsync(path);
       }
     } catch {
-      Alert.alert('Export Error', 'Failed to generate SRT subtitles.');
+      Alert.alert(t('exportError'), t('exportSrtError'));
     }
   };
 
@@ -67,7 +68,7 @@ export default function TranscriptScreen() {
         await Sharing.shareAsync(path);
       }
     } catch {
-      Alert.alert('Export Error', 'Failed to generate Markdown document.');
+      Alert.alert(t('exportError'), t('exportMdError'));
     }
   };
 
@@ -79,7 +80,7 @@ export default function TranscriptScreen() {
         await Sharing.shareAsync(path);
       }
     } catch {
-      Alert.alert('Export Error', 'Failed to export plain text.');
+      Alert.alert(t('exportError'), t('exportTxtError'));
     }
   };
 
@@ -98,7 +99,7 @@ export default function TranscriptScreen() {
             {activeRecordingTitle}
           </Text>
           <Text className="text-cyan-400 text-xs font-mono mt-0.5">
-            Model: Whisper {currentTranscript.modelUsed.toUpperCase()} • 100% On-Device
+            {t('modelWhisper', { model: currentTranscript.modelUsed.toUpperCase() })}
           </Text>
         </View>
 
@@ -109,12 +110,12 @@ export default function TranscriptScreen() {
           {copied ? (
             <>
               <Check size={14} color="#34D399" />
-              <Text className="text-emerald-400 text-xs font-bold ml-1">Copied</Text>
+              <Text className="text-emerald-400 text-xs font-bold ml-1">{t('copied')}</Text>
             </>
           ) : (
             <>
               <Copy size={14} color="#94A3B8" />
-              <Text className="text-slate-300 text-xs font-bold ml-1">Copy</Text>
+              <Text className="text-slate-300 text-xs font-bold ml-1">{t('copy')}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -136,7 +137,7 @@ export default function TranscriptScreen() {
         >
           <FileCode size={14} color="#C084FC" />
           <Text className="text-slate-200 text-xs font-bold ml-1.5">.MD</Text>
-          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">PRO</Text>}
+          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">{t('proBadge')}</Text>}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -145,7 +146,7 @@ export default function TranscriptScreen() {
         >
           <Subtitles size={14} color="#FBBF24" />
           <Text className="text-slate-200 text-xs font-bold ml-1.5">.SRT</Text>
-          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">PRO</Text>}
+          {!isPro && <Text className="text-amber-400 text-[9px] font-bold ml-1">{t('proBadge')}</Text>}
         </TouchableOpacity>
       </View>
 

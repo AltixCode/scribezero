@@ -19,6 +19,7 @@ import { startRecordingAudio, stopRecordingAudio } from '../src/services/audioRe
 import { transcribeAudio } from '../src/engine/whisperEngine';
 import { WaveformVisualizer } from '../src/components/WaveformVisualizer';
 import { PaywallModal } from '../src/components/PaywallModal';
+import { t } from '../src/i18n';
 
 const formatSeconds = (sec: number): string => {
   const m = Math.floor(sec / 60);
@@ -76,7 +77,7 @@ export default function HomeScreen() {
         const duration = recordingDuration || 5;
         const newRec: SavedRecording = {
           id: `rec_${Date.now()}`,
-          title: `Voice Memo #${recordings.length + 1}`,
+          title: t('voiceMemoDefault', { number: recordings.length + 1 }),
           uri,
           duration,
           createdAt: new Date().toISOString(),
@@ -92,7 +93,7 @@ export default function HomeScreen() {
       if (success) {
         setIsRecording(true);
       } else {
-        Alert.alert('Permission Denied', 'Please grant microphone access to record audio.');
+        Alert.alert(t('micPermission'), t('micPermissionDesc'));
       }
     }
   };
@@ -118,7 +119,7 @@ export default function HomeScreen() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       router.push('/transcript');
     } catch {
-      Alert.alert('Error', 'Transcription failed.');
+      Alert.alert(t('error'), t('transcriptionFailed'));
     } finally {
       setTranscribingId(null);
     }
@@ -132,15 +133,14 @@ export default function HomeScreen() {
           <View className="inline-flex self-start bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full mb-3 flex-row items-center">
             <Sparkles size={12} color="#38BDF8" />
             <Text className="text-cyan-400 text-xs font-semibold ml-1.5">
-              OpenAI Whisper Neural Engine
+              {t('heroBadge')}
             </Text>
           </View>
           <Text className="text-3xl font-extrabold text-white tracking-tight">
-            On-Device Transcribe
+            {t('heroTitle')}
           </Text>
           <Text className="text-slate-400 text-sm mt-1.5 leading-relaxed">
-            Convert voice memos and lectures to text locally using hardware-accelerated Whisper.
-            Zero internet required.
+            {t('heroSubtitle')}
           </Text>
         </View>
 
@@ -169,7 +169,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <Text className="text-slate-400 text-xs mt-3">
-            {isRecording ? 'Tap to Stop & Save Memo' : 'Tap to Start Recording'}
+            {isRecording ? t('tapToStop') : t('tapToStart')}
           </Text>
         </View>
 
@@ -184,9 +184,9 @@ export default function HomeScreen() {
               <Upload size={18} color="#60A5FA" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">Import External Audio</Text>
+              <Text className="text-white font-bold text-sm">{t('importAudioPrompt')}</Text>
               <Text className="text-slate-400 text-xs mt-0.5">
-                Transcribe .mp3, .m4a, or .wav recordings
+                {t('importAudioDesc')}
               </Text>
             </View>
           </View>
@@ -195,7 +195,7 @@ export default function HomeScreen() {
 
         {/* Saved Recordings List */}
         <Text className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
-          Voice Memos ({recordings.length})
+          {t('voiceMemos', { count: recordings.length })}
         </Text>
 
         {recordings.length > 0 ? (
@@ -230,7 +230,7 @@ export default function HomeScreen() {
                     ) : (
                       <>
                         <Sparkles size={12} color="#FFFFFF" />
-                        <Text className="text-white font-bold text-xs ml-1">Transcribe</Text>
+                        <Text className="text-white font-bold text-xs ml-1">{t('transcribe')}</Text>
                       </>
                     )}
                   </TouchableOpacity>
@@ -251,7 +251,7 @@ export default function HomeScreen() {
         ) : (
           <View className="bg-slate-900/40 border border-dashed border-slate-800 rounded-3xl p-6 items-center justify-center mb-6">
             <Text className="text-slate-400 text-xs text-center">
-              No voice memos recorded yet. Tap the microphone to capture audio.
+              {t('noVoiceMemos')}
             </Text>
           </View>
         )}
@@ -259,7 +259,7 @@ export default function HomeScreen() {
         {/* Privacy & Architectural Guarantees */}
         <View className="space-y-3">
           <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-            Local Machine Learning
+            {t('localMl')}
           </Text>
 
           <View className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex-row items-start mb-3">
@@ -267,10 +267,9 @@ export default function HomeScreen() {
               <Cpu size={18} color="#38BDF8" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">Apple Neural Engine / NNAPI</Text>
+              <Text className="text-white font-bold text-sm">{t('neuralEngine')}</Text>
               <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
-                Executes C++ whisper.cpp quantized neural weights using native NPU hardware
-                acceleration. Zero battery drain from video uploads.
+                {t('neuralEngineDesc')}
               </Text>
             </View>
           </View>
@@ -280,10 +279,9 @@ export default function HomeScreen() {
               <ShieldCheck size={18} color="#34D399" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-bold text-sm">Zero Server Uploads</Text>
+              <Text className="text-white font-bold text-sm">{t('zeroServerUploads')}</Text>
               <Text className="text-slate-400 text-xs mt-0.5 leading-relaxed">
-                Confidential board meetings, interviews, and ideas remain completely private in local
-                application sandbox storage.
+                {t('zeroServerUploadsDesc')}
               </Text>
             </View>
           </View>
