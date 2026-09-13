@@ -18,7 +18,24 @@
       "bundleIdentifier": "com.altixcode.scribezero",
       "buildNumber": "1",
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "ScribeZero needs microphone access to record audio memos for on-device transcription."
+        "NSMicrophoneUsageDescription": "ScribeZero needs microphone access to record audio memos for on-device transcription.",
+        "CFBundleLocalizations": [
+          "en",
+          "es",
+          "fr",
+          "de",
+          "ru",
+          "zh",
+          "ja",
+          "pt",
+          "ko",
+          "it",
+          "tr",
+          "ar",
+          "fa",
+          "el"
+        ],
+        "CFBundleDevelopmentRegion": "en"
       }
     },
     "android": {

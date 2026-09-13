@@ -9,7 +9,6 @@ import {
   Sparkles,
   FileAudio,
   Upload,
-  ArrowRight,
   ShieldCheck,
   Cpu,
   Trash2,
@@ -24,6 +23,7 @@ import { ModelGate } from '../src/components/ModelGate';
 import { getModelStatus } from '../src/services/modelManager';
 import { ModelMissingError } from '../src/engine/whisperEngine';
 import { t } from '../src/i18n';
+import { ForwardArrow } from '../src/components/DirectionalIcons';
 
 const formatSeconds = (sec: number): string => {
   const m = Math.floor(sec / 60);
@@ -236,7 +236,7 @@ export default function HomeScreen() {
               </Text>
             </View>
           </View>
-          <ArrowRight size={16} color={theme.textMuted} />
+          <ForwardArrow size={16} color={theme.textMuted} />
         </TouchableOpacity>
 
         {/* Saved Recordings List */}
