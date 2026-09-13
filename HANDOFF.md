@@ -58,3 +58,19 @@ None. App 5 (ScribeZero) is certified and ready for submission.
 * iOS and Android jobs remain independent so they can run simultaneously on separate self-hosted machines. Repository concurrency still limits duplicate release workflows to one active run per repository.
 * Store uploads are disabled on ordinary pushes until repository variable `ENABLE_STORE_UPLOADS=true` is configured. Manual dispatch can enable submission explicitly. This keeps builds green while App Store Connect and Google Play records are being created by the owner.
 * The `PLAY_STORE_SERVICE_ACCOUNT_JSON` secret is the only supported CI credential input for Play publishing; no local credential path is committed.
+
+## Product Quality Audit — 2026-09-13
+
+* Implementation commit: `dd637b4` on `main`, based on runner/store pipeline commit `db99d92`.
+* Purchase integrity: removed embedded RevenueCat fallback keys and eliminated mock purchase/restore success. Builds without configured RevenueCat keys now fail closed and cannot grant `pro` without a transaction.
+* iOS 27 startup: added an Expo config plugin that generates/registers `SceneDelegate.swift`, writes `UIApplicationSceneManifest`, and transfers React Native window startup from the legacy app delegate to the scene lifecycle. Generated `ios/` remains ignored and uncommitted.
+* CI gating: manual store submission now defaults to off; the existing secret-based signing and self-hosted runner update was preserved.
+* `rtk npm run typecheck`: PASS.
+* `EXPO_NO_TELEMETRY=1 rtk npx expo prebuild --platform ios --clean --no-install`: PASS; generated plist and Xcode sources phase both contain the scene configuration.
+* `EXPO_NO_TELEMETRY=1 EXPO_HOME=/private/tmp/scribezero-expo-home rtk npx expo export --platform ios`: PASS (`entry-d51ffc087ad2d59d203ec5f1572b3328.hbc`).
+* `EXPO_NO_TELEMETRY=1 EXPO_HOME=/private/tmp/scribezero-expo-home rtk npx expo export --platform android`: PASS (`entry-1a883aee50e9f7b605b1f88fdb21d3ab.hbc`).
+* iOS Simulator: PASS for native installation/startup and home/empty-state rendering on iPhone 17e (`819B73BF-147D-4D3A-966C-F786CBBC00F3`), iOS 27.0, Xcode 27.0 beta, macOS ARM64 runner. PID 57154 connected to Metro and evaluated the JS bundle without the iOS 27 scene-lifecycle `SIGTRAP` or an uncaught JS exception. Screenshot: `/private/tmp/scribezero-home.png`.
+* Tap-driven recording, permission denial, transcription, export, purchase, and restore paths: NOT RUN because this beta toolchain exposes CoreSimulator headlessly and no Simulator GUI or `idb` automation client is installed.
+* Android Emulator: NOT RUN; the required Linux x64 emulator runner is not available from this macOS workspace.
+* RevenueCat/store status: UNKNOWN externally. No store record was created and no upload was attempted.
+* Remaining blockers: full iOS interaction matrix, Linux x64 Android device QA, required state screenshots/log review, and owner-managed store verification. Status remains `PENDING_EXTERNAL_VERIFICATION`.
