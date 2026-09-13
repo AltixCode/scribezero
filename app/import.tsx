@@ -124,7 +124,7 @@ export default function ImportScreen() {
             className="w-full py-4 rounded-2xl flex-row items-center justify-center mb-4 min-h-[50px]"
           >
             <Upload size={18} color="#FFFFFF" />
-            <Text className="text-white font-bold text-base ml-2">{t('selectAudioFile')}</Text>
+            <Text className="font-bold text-base ml-2" style={{ color: theme.text }}>{t('selectAudioFile')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

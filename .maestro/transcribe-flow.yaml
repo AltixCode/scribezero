@@ -15,9 +15,13 @@ name: Transcribe a known recording
 - takeScreenshot: artifacts/01-home
 
 - tapOn: ".*Import External Audio.*"
+# Anchor on the document browser itself. Matching visible text risks returning
+# before the picker has presented, which sends the following taps to the app's
+# own screen where they report COMPLETED and do nothing.
 - extendedWaitUntil:
-    visible: ".*(Browse|Recents|Files|On My iPhone).*"
-    timeout: 25000
+    visible:
+      id: "DOC.browsingView"
+    timeout: 30000
 - waitForAnimationToEnd:
     timeout: 8000
 - takeScreenshot: artifacts/02-files
@@ -30,7 +34,17 @@ name: Transcribe a known recording
     timeout: 30000
 - takeScreenshot: artifacts/03-model-gate
 - tapOn: ".*Download model.*"
+# "Transcript" is the navigation title, so the previous alternation here passed
+# the moment the screen appeared and proved nothing about what was transcribed.
+# Wait on words that can only come from the fixture audio.
 - extendedWaitUntil:
-    visible: ".*(quick|brown|fox|Transcript).*"
+    visible: ".*quick brown fox.*"
     timeout: 600000
+- assertVisible: ".*lazy dog.*"
 - takeScreenshot: artifacts/04-transcript
+# Copy the transcript so verify-transcript.sh can score the exact text against
+# ground truth rather than eyeballing a screenshot.
+- tapOn: "Copy"
+- extendedWaitUntil:
+    visible: "Copied"
+    timeout: 10000

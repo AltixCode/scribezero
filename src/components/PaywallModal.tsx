@@ -40,7 +40,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
       desc: t('feat1Desc'),
     },
     {
-      icon: <FileAudio size={20} color="#A855F7" />,
+      icon: <FileAudio size={20} color={theme.purple} />,
       title: t('feat2Title'),
       desc: t('feat2Desc'),
     },
@@ -153,7 +153,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <>
-                <Text className="text-white font-extrabold text-base mr-2">
+                <Text className="font-extrabold text-base mr-2" style={{ color: theme.text }}>
                   {ctaLabel}
                 </Text>
                 <Check size={18} color="#FFFFFF" strokeWidth={3} />

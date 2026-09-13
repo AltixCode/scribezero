@@ -285,7 +285,7 @@ export default function HomeScreen() {
                     ) : (
                       <>
                         <Sparkles size={12} color="#FFFFFF" />
-                        <Text className="text-white font-bold text-xs ml-1">{t('transcribe')}</Text>
+                        <Text className="font-bold text-xs ml-1" style={{ color: theme.text }}>{t('transcribe')}</Text>
                       </>
                     )}
                   </TouchableOpacity>

@@ -142,7 +142,7 @@ export default function PaywallScreen() {
             <ActivityIndicator color="#FFFFFF" />
           ) : (
             <>
-              <Text className="text-white font-extrabold text-base mr-2">
+              <Text className="font-extrabold text-base mr-2" style={{ color: theme.text }}>
                 {ctaLabel}
               </Text>
               <Check size={18} color="#FFFFFF" strokeWidth={3} />
