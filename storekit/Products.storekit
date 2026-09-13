@@ -1,0 +1,35 @@
+{
+  "identifier": "F71D08EB-8CF4-44B8-93D7-9A893AEADFA9",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "7.99",
+      "familyShareable": false,
+      "internalID": "54408F39-323A-4FA5-9F8A-EC914D7A7986",
+      "localizations": [
+        {
+          "description": "ScribeZero Pro lifetime unlock",
+          "displayName": "ScribeZero Pro",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "scribezero_pro_lifetime",
+      "referenceName": "ScribeZero Pro",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { TranscriptionResult, WhisperModel } from '../engine/whisperEngine';
+import { TranscriptionResult } from '../engine/whisperEngine';
 
 export interface SavedRecording {
   id: string;
@@ -18,7 +18,6 @@ interface AudioState {
   recordings: SavedRecording[];
   currentTranscript: TranscriptionResult | null;
   activeRecordingTitle: string;
-  model: WhisperModel;
   isPro: boolean;
   isTranscribing: boolean;
   dailyTranscriptionsCount: number;
@@ -32,7 +31,6 @@ interface AudioState {
   addRecording: (rec: SavedRecording) => void;
   deleteRecording: (id: string) => void;
   setCurrentTranscript: (transcript: TranscriptionResult | null) => void;
-  setModel: (model: WhisperModel) => void;
   setIsPro: (isPro: boolean) => void;
   setIsTranscribing: (isTranscribing: boolean) => void;
   incrementDailyCount: () => void;
@@ -47,7 +45,6 @@ export const useAudioStore = create<AudioState>((set) => ({
   recordings: [],
   currentTranscript: null,
   activeRecordingTitle: 'Voice Memo',
-  model: 'tiny',
   isPro: false,
   isTranscribing: false,
   dailyTranscriptionsCount: 0,
@@ -66,7 +63,6 @@ export const useAudioStore = create<AudioState>((set) => ({
       recordings: state.recordings.filter((r) => r.id !== id),
     })),
   setCurrentTranscript: (currentTranscript) => set({ currentTranscript }),
-  setModel: (model) => set({ model }),
   setIsPro: (isPro) => set({ isPro }),
   setIsTranscribing: (isTranscribing) => set({ isTranscribing }),
   incrementDailyCount: () =>

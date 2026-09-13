@@ -1,0 +1,36 @@
+appId: com.altixcode.scribezero
+name: Transcribe a known recording
+---
+# The fixture speaks one known sentence, so the transcript can be scored
+# against ground truth rather than judged on whether it reads like prose. The
+# stub this replaces returned the same four sentences for any input.
+- launchApp:
+    clearState: false
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Cancel"
+- assertVisible: "On-Device Transcribe"
+- takeScreenshot: artifacts/01-home
+
+- tapOn: ".*Import External Audio.*"
+- extendedWaitUntil:
+    visible: ".*(Browse|Recents|Files|On My iPhone).*"
+    timeout: 25000
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: artifacts/02-files
+- tapOn: ".*scribe-fixture.*"
+
+# First transcription must fetch the speech model; the gate states its size and
+# that it carries no audio.
+- extendedWaitUntil:
+    visible: ".*(speech model|Download model).*"
+    timeout: 30000
+- takeScreenshot: artifacts/03-model-gate
+- tapOn: ".*Download model.*"
+- extendedWaitUntil:
+    visible: ".*(quick|brown|fox|Transcript).*"
+    timeout: 600000
+- takeScreenshot: artifacts/04-transcript

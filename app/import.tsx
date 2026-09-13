@@ -13,7 +13,7 @@ import { t } from '../src/i18n';
 export default function ImportScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const { isPro, model, setCurrentTranscript, setActiveRecordingTitle } = useAudioStore();
+  const { isPro, setCurrentTranscript, setActiveRecordingTitle } = useAudioStore();
 
   const [loading, setLoading] = useState(false);
   const [paywallVisible, setPaywallVisible] = useState(false);
@@ -36,7 +36,7 @@ export default function ImportScreen() {
         setLoading(true);
         setActiveRecordingTitle(asset.name || t('importedAudio'));
 
-        const transcriptResult = await transcribeAudio(asset.uri, model);
+        const transcriptResult = await transcribeAudio(asset.uri);
         setCurrentTranscript(transcriptResult);
 
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

@@ -105,7 +105,7 @@ export default function TranscriptScreen() {
             {activeRecordingTitle}
           </Text>
           <Text style={{ color: theme.accent }} className="text-xs font-mono mt-0.5 font-semibold">
-            {t('modelWhisper', { model: currentTranscript.modelUsed.toUpperCase() })}
+            {t('modelWhisper', { model: 'WHISPER TINY' })}
           </Text>
         </View>
 

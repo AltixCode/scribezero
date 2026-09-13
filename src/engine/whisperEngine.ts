@@ -1,69 +1,108 @@
+import { initWhisper, type WhisperContext } from "whisper.rn/index";
+import { getModelStatus, modelPath } from "../services/modelManager";
+
 export interface TranscriptSegment {
   id: string;
-  start: number; // in seconds
+  /** Seconds from the start of the recording. */
+  start: number;
   end: number;
   text: string;
 }
-
-export type WhisperModel = 'tiny' | 'base';
 
 export interface TranscriptionResult {
   fullText: string;
   segments: TranscriptSegment[];
   duration: number;
-  modelUsed: WhisperModel;
 }
 
+export class ModelMissingError extends Error {
+  constructor() {
+    super("The speech model has not been downloaded yet.");
+    this.name = "ModelMissingError";
+  }
+}
+
+let context: WhisperContext | null = null;
+let loading: Promise<WhisperContext> | null = null;
+
 /**
- * Runs local neural audio transcription using quantized Whisper weights.
+ * Loads the whisper context once and reuses it.
+ *
+ * Initialisation reads a ~31 MB model into memory, so doing it per transcription
+ * would dominate the runtime and churn memory on older devices.
+ */
+const getContext = async (): Promise<WhisperContext> => {
+  if (context) return context;
+  if (loading) return loading;
+
+  loading = (async () => {
+    const status = await getModelStatus();
+    if (!status.ready) throw new ModelMissingError();
+
+    const created = await initWhisper({ filePath: modelPath() });
+    context = created;
+    return created;
+  })();
+
+  try {
+    return await loading;
+  } finally {
+    loading = null;
+  }
+};
+
+/**
+ * Transcribes a recording on device.
+ *
+ * This replaces a stub that returned four hard-coded sentences after two
+ * setTimeouts, identical for every input. Inference runs locally through
+ * whisper.cpp; no audio leaves the device.
  */
 export const transcribeAudio = async (
   audioUri: string,
-  model: WhisperModel = 'tiny',
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
 ): Promise<TranscriptionResult> => {
-  if (onProgress) onProgress(0.2);
+  const whisper = await getContext();
 
-  // Simulated local inference delay to mimic on-device NPU compute
-  await new Promise((res) => setTimeout(res, 800));
-  if (onProgress) onProgress(0.6);
+  onProgress?.(0.05);
 
-  await new Promise((res) => setTimeout(res, 800));
-  if (onProgress) onProgress(1.0);
+  const { promise } = whisper.transcribe(audioUri, {
+    // Auto-detect rather than assuming English: the app ships in fourteen
+    // locales and the model is the multilingual build.
+    language: "auto",
+    onProgress: (value: number) => {
+      // whisper.cpp reports 0-100.
+      onProgress?.(Math.min(0.99, Math.max(0.05, value / 100)));
+    },
+  });
 
-  const sampleSegments: TranscriptSegment[] = [
-    {
-      id: 'seg_1',
-      start: 0.0,
-      end: 4.2,
-      text: 'Good morning everyone. Thank you for joining today’s product architecture review.',
-    },
-    {
-      id: 'seg_2',
-      start: 4.5,
-      end: 9.8,
-      text: 'Our primary objective is verifying that all six on-device mobile applications run with zero cloud dependencies.',
-    },
-    {
-      id: 'seg_3',
-      start: 10.1,
-      end: 15.4,
-      text: 'Because no external APIs or servers are provisioned, our operating and maintenance costs remain strictly zero dollars.',
-    },
-    {
-      id: 'seg_4',
-      start: 15.7,
-      end: 21.0,
-      text: 'All audio transcribing, image scaling, and PDF signatures execute 100% locally on the device hardware.',
-    },
-  ];
+  const result = await promise;
+  onProgress?.(1);
 
-  const fullText = sampleSegments.map((s) => s.text).join(' ');
+  const segments: TranscriptSegment[] = (result.segments ?? [])
+    .map((segment, index) => ({
+      id: `seg_${index}`,
+      // whisper.cpp timestamps are centiseconds.
+      start: segment.t0 / 100,
+      end: segment.t1 / 100,
+      text: segment.text.trim(),
+    }))
+    .filter((segment) => segment.text.length > 0);
+
+  const duration = segments.length > 0 ? segments[segments.length - 1].end : 0;
 
   return {
-    fullText,
-    segments: sampleSegments,
-    duration: 21.0,
-    modelUsed: model,
+    fullText: segments
+      .map((segment) => segment.text)
+      .join(" ")
+      .trim(),
+    segments,
+    duration,
   };
+};
+
+export const releaseWhisper = async (): Promise<void> => {
+  if (!context) return;
+  await context.release();
+  context = null;
 };

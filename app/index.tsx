@@ -20,6 +20,9 @@ import { transcribeAudio } from '../src/engine/whisperEngine';
 import { WaveformVisualizer } from '../src/components/WaveformVisualizer';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { ModelGate } from '../src/components/ModelGate';
+import { getModelStatus } from '../src/services/modelManager';
+import { ModelMissingError } from '../src/engine/whisperEngine';
 import { t } from '../src/i18n';
 
 const formatSeconds = (sec: number): string => {
@@ -36,7 +39,6 @@ export default function HomeScreen() {
     recordingDuration,
     meteringLevel,
     recordings,
-    model,
     isPro,
     dailyTranscriptionsCount,
     setIsRecording,
@@ -51,6 +53,8 @@ export default function HomeScreen() {
 
   const [transcribingId, setTranscribingId] = useState<string | null>(null);
   const [paywallVisible, setPaywallVisible] = useState(false);
+  const [modelGateVisible, setModelGateVisible] = useState(false);
+  const [pendingRecording, setPendingRecording] = useState<SavedRecording | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -109,19 +113,33 @@ export default function HomeScreen() {
       }
     }
 
+    // Transcription cannot start without the model; ask for it rather than
+    // failing with an opaque native error.
+    const status = await getModelStatus();
+    if (!status.ready) {
+      setPendingRecording(rec);
+      setModelGateVisible(true);
+      return;
+    }
+
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setTranscribingId(rec.id);
       setActiveRecordingTitle(rec.title);
 
-      const result = await transcribeAudio(rec.uri, model);
+      const result = await transcribeAudio(rec.uri);
       setCurrentTranscript(result);
       incrementDailyCount();
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       router.push('/transcript');
-    } catch {
-      Alert.alert(t('error'), t('transcriptionFailed'));
+    } catch (err) {
+      if (err instanceof ModelMissingError) {
+        setPendingRecording(rec);
+        setModelGateVisible(true);
+      } else {
+        Alert.alert(t('error'), t('transcriptionFailed'));
+      }
     } finally {
       setTranscribingId(null);
     }
@@ -347,6 +365,19 @@ export default function HomeScreen() {
 
       {/* Embedded Paywall Modal */}
       <PaywallModal visible={paywallVisible} onClose={() => setPaywallVisible(false)} />
+      <ModelGate
+        visible={modelGateVisible}
+        onCancel={() => {
+          setModelGateVisible(false);
+          setPendingRecording(null);
+        }}
+        onReady={() => {
+          setModelGateVisible(false);
+          const queued = pendingRecording;
+          setPendingRecording(null);
+          if (queued) handleTranscribe(queued);
+        }}
+      />
     </SafeAreaView>
   );
 }
