@@ -8,9 +8,11 @@ import { useAudioStore } from '../src/store/useAudioStore';
 import { transcribeAudio } from '../src/engine/whisperEngine';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { usePaywall } from '../src/hooks/usePaywall';
 import { t } from '../src/i18n';
 
 export default function ImportScreen() {
+  const { priceString } = usePaywall(() => undefined);
   const router = useRouter();
   const theme = useTheme();
   const { isPro, setCurrentTranscript, setActiveRecordingTitle } = useAudioStore();
@@ -102,7 +104,7 @@ export default function ImportScreen() {
                 className="px-3 py-1.5 rounded-lg border flex-row items-center"
               >
                 <Lock size={12} color={theme.warning} />
-                <Text style={{ color: theme.warning }} className="text-xs font-bold ml-1.5">{t('unlockPro')}</Text>
+                <Text style={{ color: theme.warning }} className="text-xs font-bold ml-1.5">{t('unlockPro', { price: priceString ?? '' })}</Text>
               </TouchableOpacity>
             </View>
           )}

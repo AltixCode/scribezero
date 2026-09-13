@@ -43,28 +43,12 @@ Deployed via Coolify on Hetzner VPS (`2.28.42.222`).
 * Zero-log and zero-cloud invariants: No remote analytics, error trackers, or telemetry that uploads user media or identifiers.
 * All processing must occur in local sandboxed storage and stream to `expo-media-library` or `expo-sharing`.
 
-## 6. Mandatory 12-Language Localization Protocol
+## 6. Localization
 
-Every screen, modal, error message, button label, and UI component **MUST** be localized across 12 tier-1 languages. Hardcoded English strings in user-facing UI are strictly prohibited.
+Governed by `docs/agents/12-product-standards.md` §16.1 in the portfolio root.
+Fourteen locales, ten of them mandatory, with RTL layout required for Persian
+(`fa`) and Arabic (`ar`). Do not restate the locale list here — it drifted once
+already.
 
-### Supported Languages (12 Tier-1 Global Markets)
-1. **English (`en`)** — Default / Fallback
-2. **Spanish (`es`)**
-3. **French (`fr`)**
-4. **German (`de`)**
-5. **Russian (`ru`)**
-6. **Simplified Chinese (`zh`)**
-7. **Japanese (`ja`)**
-8. **Brazilian Portuguese (`pt`)**
-9. **Korean (`ko`)**
-10. **Italian (`it`)**
-11. **Turkish (`tr`)**
-12. **Arabic (`ar`)** (RTL)
-
-### Implementation Standards
-- **Source of Truth:** `src/i18n/index.ts` contains typed translation tables mapping `TranslationKey` across all 12 language codes.
-- **System Language Detection:** Uses `expo-localization` (`getLocales()[0]?.languageCode`) to detect device language automatically. If the language is unsupported, fallback is always English (`en`).
-- **Translation Function:** `t(key: TranslationKey, params?: Record<string, string | number>): string`
-- **Zero Heavy Runtime Overheads:** Lightweight typed dictionary approach; no external heavyweight i18n runtime bundles required.
-- **Anti-Subscription Promise:** Must be preserved across all translations: *"No Subscriptions. No Accounts. 100% On-Device Privacy. Own It Forever."*
-- **Verification Requirement:** Every change to UI strings requires running `npx tsc --noEmit` to verify type completeness and key integrity across all screens.
+Use `scripts/add-i18n-keys.mjs` from the portfolio root to add a key; it refuses
+to write a partial set, so a key cannot ship English to a market by accident.
