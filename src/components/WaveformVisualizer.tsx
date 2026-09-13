@@ -25,7 +25,7 @@ export const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({
   });
 
   return (
-    <View className="flex-row items-center justify-center space-x-1.5 h-16 w-full px-4">
+    <View className="flex-row items-center justify-center gap-1.5 h-16 w-full px-4">
       {bars.map((h, idx) => (
         <View
           key={idx}

@@ -132,7 +132,7 @@ export default function TranscriptScreen() {
       </View>
 
       {/* Export Format Ribbons */}
-      <View className="flex-row space-x-2 mb-4">
+      <View className="flex-row gap-2 mb-4">
         <TouchableOpacity
           onPress={handleExportText}
           hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}

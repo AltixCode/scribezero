@@ -149,7 +149,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           </View>
 
           {/* Features List */}
-          <ScrollView showsVerticalScrollIndicator={false} className="space-y-3.5 mb-5">
+          <ScrollView showsVerticalScrollIndicator={false} className="flex-col gap-3.5 mb-5">
             {features.map((f, i) => (
               <View key={i} className="flex-row items-start mb-3.5">
                 <View
@@ -202,7 +202,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({ visible, onClose }) 
           </TouchableOpacity>
 
           {/* Restore & Policy Links */}
-          <View className="flex-row items-center justify-center space-x-6 mt-4">
+          <View className="flex-row items-center justify-center gap-6 mt-4">
             <TouchableOpacity
               onPress={handleRestore}
               disabled={loading}

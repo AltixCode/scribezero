@@ -254,7 +254,7 @@ export default function HomeScreen() {
                   </View>
                 </View>
 
-                <View className="flex-row items-center space-x-2">
+                <View className="flex-row items-center gap-2">
                   <TouchableOpacity
                     onPress={() => handleTranscribe(rec)}
                     disabled={transcribingId === rec.id}
@@ -302,7 +302,7 @@ export default function HomeScreen() {
         )}
 
         {/* Privacy & Architectural Guarantees */}
-        <View className="space-y-3">
+        <View className="flex-col gap-3">
           <Text style={{ color: theme.textMuted }} className="text-xs font-bold uppercase tracking-wider mb-2">
             {t('localMl')}
           </Text>
