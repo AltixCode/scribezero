@@ -1,0 +1,32 @@
+appId: com.altixcode.scribezero
+name: Store screenshots
+---
+# The transcription screens need Pro, which cannot be purchased under simctl
+# (StoreKit's local configuration only applies to an Xcode launch), so this
+# captures what is reachable: the recorder, the import screen and the paywall.
+# It deliberately does not stage a fake transcript -- a screenshot of output the
+# build did not produce is exactly what Apple rejects.
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: 01-hero
+
+- tapOn: ".*Import External Audio.*"
+- extendedWaitUntil:
+    visible: ".*Select Audio File.*"
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 2500
+- takeScreenshot: 02-import
+
+- tapOn: ".*Back.*"
+- extendedWaitUntil:
+    visible: "On-Device Transcribe"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      text: ".*Local whisper.*"
+    direction: DOWN
+    timeout: 20000
+- takeScreenshot: 03-engine
