@@ -42,7 +42,7 @@ None. App 5 (ScribeZero) is certified and ready for submission.
 
 ## Verification Update — 2026-09-13
 
-* Pushed commit: `213fcf1` on `main`.
+* Latest workflow commit: `4f87865` on `main`; skipped Play uploads emit an explicit warning.
 * TypeScript: PASS — `rtk pnpm typecheck`
 * Production exports: PASS — `rtk pnpm export:ios`, `rtk pnpm export:android`
 * Observed GitHub Actions runs after push: `34745138698 (queued); 34745166282 (pending)` for `AltixCode/scribezero`.
