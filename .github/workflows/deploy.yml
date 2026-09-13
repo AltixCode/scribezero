@@ -20,7 +20,7 @@ on:
       submit_to_stores:
         description: 'Automatically submit to TestFlight / Play Store'
         required: true
-        default: true
+        default: false
         type: boolean
       ios_runner:
         description: 'iOS runner (self-hosted first; hosted is backup)'

@@ -2,8 +2,8 @@ import { Platform } from 'react-native';
 import Purchases, { PurchasesPackage } from 'react-native-purchases';
 
 const RC_API_KEY = Platform.select({
-  ios: process.env.EXPO_PUBLIC_RC_IOS_KEY || 'appl_zSGWXygELiWXWlqxvfONruWRjSs',
-  android: process.env.EXPO_PUBLIC_RC_ANDROID_KEY || 'goog_OCQCnAAUgWFAOYNKzjTaBgSvLbM',
+  ios: process.env.EXPO_PUBLIC_RC_IOS_KEY,
+  android: process.env.EXPO_PUBLIC_RC_ANDROID_KEY,
 });
 
 let isInitialized = false;
@@ -16,7 +16,7 @@ export const initPurchases = async (): Promise<void> => {
       await Purchases.configure({ apiKey: RC_API_KEY });
       isInitialized = true;
     } else {
-      console.log('[Purchases] Operating in local development sandbox mode.');
+      console.warn('[Purchases] RevenueCat is not configured for this build.');
     }
   } catch (error) {
     console.warn('[Purchases] Initialization warning (offline/sandbox):', error);
@@ -26,8 +26,7 @@ export const initPurchases = async (): Promise<void> => {
 export const purchaseLifetime = async (): Promise<boolean> => {
   try {
     if (!isInitialized) {
-      console.log('[Purchases] Mocking lifetime purchase in sandbox mode.');
-      return true;
+      return false;
     }
     const offerings = await Purchases.getOfferings();
     const pkg: PurchasesPackage | undefined =
@@ -61,7 +60,7 @@ export const checkIsPro = async (): Promise<boolean> => {
 export const restorePurchases = async (): Promise<boolean> => {
   try {
     if (!isInitialized) {
-      return true;
+      return false;
     }
     const customerInfo = await Purchases.restorePurchases();
     return typeof customerInfo.entitlements.active['pro'] !== 'undefined';
