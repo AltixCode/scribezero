@@ -1,0 +1,36 @@
+appId: com.altixcode.scribezero
+name: Record and transcribe through the free path
+---
+# The import path is Pro-gated and a purchase cannot be completed under simctl
+# (StoreKit's local configuration only applies to an Xcode launch), so the
+# engine is exercised through recording, which is free. This proves the
+# whisper.rn binding loads, the model gate downloads, and inference runs on
+# device without crashing. Accuracy against known speech needs the import path.
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- assertVisible: "On-Device Transcribe"
+# The tappable element is the mic button; the caption below it is separate
+# text and tapping that does nothing.
+- tapOn:
+    point: "201,440"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: rec-01-recording
+- tapOn:
+    point: "201,440"
+- extendedWaitUntil:
+    visible: ".*Voice Memos \\(1\\).*"
+    timeout: 25000
+- takeScreenshot: rec-02-saved
+- tapOn: "Transcribe"
+- extendedWaitUntil:
+    visible: ".*(speech model|Download model).*"
+    timeout: 30000
+- takeScreenshot: rec-03-model-gate
+- tapOn: ".*Download model.*"
+- extendedWaitUntil:
+    visible: ".*Transcript.*"
+    timeout: 900000
+- takeScreenshot: rec-04-transcript

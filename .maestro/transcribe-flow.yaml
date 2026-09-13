@@ -15,17 +15,44 @@ name: Transcribe a known recording
 - takeScreenshot: artifacts/01-home
 
 - tapOn: ".*Import External Audio.*"
-# Anchor on the document browser itself. Matching visible text risks returning
-# before the picker has presented, which sends the following taps to the app's
-# own screen where they report COMPLETED and do nothing.
+# "Import External Audio" only opens the import screen; the picker is behind a
+# second tap.
 - extendedWaitUntil:
-    visible:
-      id: "DOC.browsingView"
+    visible: ".*Select Audio File.*"
+    timeout: 20000
+- takeScreenshot: artifacts/01b-import
+- tapOn: ".*Select Audio File.*"
+# Wait on chrome only the document picker has. "Files" and "Import" are unsafe
+# here: Maestro matches case-insensitively, so a wait on either is satisfied by
+# the app's own "Import External Audio" button and returns before the picker
+# has presented -- the taps below then land on the home screen and report
+# COMPLETED without doing anything.
+- extendedWaitUntil:
+    visible: ".*(Recents|On My iPhone|Browse).*"
     timeout: 30000
 - waitForAnimationToEnd:
     timeout: 8000
+# The picker opens on Recents, which is empty on a fresh simulator; the fixture
+# lives under On My iPhone.
+- runFlow:
+    when:
+      visible: "No Recents"
+    commands:
+      - tapOn: "Browse"
+      - waitForAnimationToEnd:
+          timeout: 6000
+      - runFlow:
+          when:
+            visible: "On My iPhone"
+          commands:
+            - tapOn: "On My iPhone"
+            - waitForAnimationToEnd:
+                timeout: 6000
 - takeScreenshot: artifacts/02-files
-- tapOn: ".*scribe-fixture.*"
+# Tap the thumbnail, not the filename: a tap on the label reports COMPLETED and
+# leaves the picker open. The grid holds exactly one file.
+- tapOn:
+    point: "71,242"
 
 # First transcription must fetch the speech model; the gate states its size and
 # that it carries no audio.
