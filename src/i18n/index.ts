@@ -12,7 +12,9 @@ export type SupportedLanguage =
   | 'ko'
   | 'it'
   | 'tr'
-  | 'ar';
+  | 'ar'
+  | 'fa'
+  | 'el';
 
 export const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
   'en',
@@ -27,6 +29,8 @@ export const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
   'it',
   'tr',
   'ar',
+  'fa',
+  'el',
 ];
 
 export const translations = {
@@ -953,6 +957,160 @@ export const translations = {
     "unexpectedError": "حدث خطأ غير متوقع أثناء الدفع.",
     "noPriorPurchases": "لم يتم العثور على مشتريات سابقة لاستعادتها.",
     "restoreError": "فشلت استعادة المشتريات."
+  },
+  "fa": {
+    "proBadge": "پرو",
+    "modelNeededTitle": "دانلود یک‌بارهٔ مدل گفتار",
+    "modelNeededDesc": "برای پیاده‌سازی متن، ScribeZero به یک مدل گفتار ۳۱ مگابایتی نیاز دارد. این مدل یک بار دانلود می‌شود و روی همین دستگاه می‌ماند.",
+    "modelPrivacyNote": "این دانلود هیچ صدا و هیچ اطلاعات شخصی ندارد. پس از پایان آن، پیاده‌سازی کاملاً آفلاین انجام می‌شود و ضبط‌های شما از دستگاه خارج نمی‌شوند.",
+    "modelDownloadCta": "دانلود مدل",
+    "modelDownloading": "در حال دانلود…",
+    "modelDownloadingPercent": "در حال دانلود… ٪{percent}",
+    "modelDownloadFailed": "دانلود مدل کامل نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.",
+    "lifetimeAccess": "باز کردن دسترسی دائمی — {price}",
+    "lifetimeAccessPlain": "باز کردن دسترسی دائمی",
+    "storeUnavailable": "در حال حاضر دسترسی به فروشگاه ممکن نیست. اتصال خود را بررسی کنید و دوباره تلاش کنید.",
+    "purchaseFailed": "خرید کامل نشد. مبلغی از شما کسر نشده است.",
+    "termsOfUse": "شرایط استفاده",
+    "privacyPolicy": "سیاست حریم خصوصی",
+    "restorePurchases": "بازیابی خریدها",
+    "oneTimePayment": "پرداخت یک‌باره. بدون تمدید خودکار.",
+    "cancel": "انصراف",
+    "back": "بازگشت",
+    "error": "خطا",
+    "appName": "ScribeZero",
+    "transcriptTitle": "متن پیاده‌شده",
+    "importTitle": "وارد کردن صدا",
+    "paywallTitle": "ScribeZero Pro",
+    "heroBadge": "تشخیص گفتار روی دستگاه",
+    "heroTitle": "پیاده‌سازی متن روی دستگاه",
+    "heroSubtitle": "یادداشت‌های صوتی و سخنرانی‌ها را روی همین دستگاه به متن تبدیل کنید. پس از یک دانلود یک‌بارهٔ مدل، همه‌چیز آفلاین کار می‌کند.",
+    "tapToStop": "برای توقف و ذخیره ضربه بزنید",
+    "tapToStart": "برای شروع ضبط ضربه بزنید",
+    "importAudioPrompt": "وارد کردن فایل صوتی",
+    "importAudioDesc": "پیاده‌سازی فایل‌های .mp3، .m4a یا .wav",
+    "voiceMemos": "یادداشت‌های صوتی ({count})",
+    "voiceMemoDefault": "یادداشت صوتی #{number}",
+    "transcribe": "پیاده‌سازی",
+    "noVoiceMemos": "هنوز یادداشت صوتی ضبط نشده است. برای ضبط، روی میکروفون ضربه بزنید.",
+    "micPermission": "دسترسی داده نشد",
+    "micPermissionDesc": "برای ضبط صدا، لطفاً دسترسی به میکروفون را فعال کنید.",
+    "transcriptionFailed": "پیاده‌سازی متن انجام نشد.",
+    "localMl": "یادگیری ماشین محلی",
+    "neuralEngine": "اجرای whisper.cpp روی دستگاه",
+    "neuralEngineDesc": "وزن‌های کوانتیزه‌شدهٔ whisper.cpp را روی همین دستگاه اجرا می‌کند. صدای شما هرگز ارسال نمی‌شود و هیچ اعتبار ابری مصرف نمی‌گردد.",
+    "zeroServerUploads": "بدون ارسال به سرور",
+    "zeroServerUploadsDesc": "جلسات محرمانه، مصاحبه‌ها و ایده‌های شما در حافظهٔ اختصاصی برنامه روی دستگاه باقی می‌مانند.",
+    "importAudioTitle": "وارد کردن فایل صوتی",
+    "importAudioLongDesc": "از فایل‌های .mp3، .m4a و .wav پشتیبانی می‌کند. سخنرانی‌های ضبط‌شده، صدای جلسات و پادکست‌ها را آفلاین پردازش کنید.",
+    "transcribingWhisper": "در حال پیاده‌سازی با مدل Whisper",
+    "transcribingWhisperDesc": "پردازش صدای تک‌کاناله با نرخ ۱۶ کیلوهرتز روی سخت‌افزار دستگاه شما...",
+    "proFeature": "قابلیت نسخهٔ Pro",
+    "proFeatureDesc": "وارد کردن فایل صوتی خارجی به ScribeZero Pro نیاز دارد.",
+    "unlockPro": "خرید — {price}",
+    "selectAudioFile": "انتخاب فایل صوتی",
+    "importedAudio": "صدای واردشده",
+    "importError": "خطا در وارد کردن",
+    "importErrorDesc": "خواندن فایل صوتی خارجی ممکن نشد.",
+    "modelWhisper": "مدل: {model} • کاملاً روی دستگاه",
+    "copy": "کپی",
+    "copied": "کپی شد",
+    "exportError": "خطا در خروجی گرفتن",
+    "exportSrtError": "ساخت زیرنویس SRT انجام نشد.",
+    "exportMdError": "ساخت سند Markdown انجام نشد.",
+    "exportTxtError": "خروجی گرفتن متن ساده انجام نشد.",
+    "antiSubTitle": "تعهد ما: بدون اشتراک",
+    "antiSubHeadline": "بدون اشتراک. بدون حساب کاربری. حریم خصوصی کامل روی دستگاه. برای همیشه مال شماست.",
+    "antiSubDesc": "برنامه‌های دیگر ماهانه ۱۵ تا ۳۰ دلار بابت اعتبار ابری می‌گیرند. ScribeZero کاملاً روی گوشی شما اجرا می‌شود، با یک پرداخت یک‌باره.",
+    "feat1Title": "مدت ضبط نامحدود",
+    "feat1Desc": "سخنرانی‌های یک‌ساعته، جلسات و مصاحبه‌های طولانی را بدون محدودیت زمانی پیاده کنید.",
+    "feat2Title": "وارد کردن فایل صوتی",
+    "feat2Desc": "فایل‌های صوتی خارجی (.mp3، .m4a، .wav) از هر برنامه‌ای را پیاده کنید.",
+    "feat3Title": "زیرنویس SRT و خروجی Markdown",
+    "feat3Desc": "زیرنویس SubRip زمان‌بندی‌شده (.srt) و یادداشت‌های Markdown قالب‌بندی‌شده بگیرید.",
+    "feat4Title": "کاملاً خصوصی روی دستگاه",
+    "feat4Desc": "Whisper روی سخت‌افزار گوشی شما اجرا می‌شود. هیچ داده‌ای از صدای شما ارسال نمی‌گردد.",
+    "purchaseError": "خرید لغو شد یا کامل نشد.",
+    "unexpectedError": "خطای غیرمنتظره‌ای در پرداخت رخ داد.",
+    "noPriorPurchases": "خرید قبلی برای بازیابی پیدا نشد.",
+    "restoreError": "بازیابی خریدها انجام نشد."
+  },
+  "el": {
+    "proBadge": "PRO",
+    "modelNeededTitle": "Εφάπαξ λήψη μοντέλου ομιλίας",
+    "modelNeededDesc": "Το ScribeZero χρειάζεται ένα μοντέλο ομιλίας 31 MB για να απομαγνητοφωνεί. Λαμβάνεται μία φορά και παραμένει σε αυτή τη συσκευή.",
+    "modelPrivacyNote": "Η λήψη δεν περιέχει ήχο ούτε προσωπικά δεδομένα. Μόλις ολοκληρωθεί, η απομαγνητοφώνηση γίνεται εντελώς εκτός σύνδεσης και οι ηχογραφήσεις σας δεν φεύγουν από τη συσκευή.",
+    "modelDownloadCta": "Λήψη μοντέλου",
+    "modelDownloading": "Γίνεται λήψη…",
+    "modelDownloadingPercent": "Γίνεται λήψη… {percent}%",
+    "modelDownloadFailed": "Η λήψη του μοντέλου δεν ολοκληρώθηκε. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+    "lifetimeAccess": "Ξεκλείδωμα ισόβιας πρόσβασης — {price}",
+    "lifetimeAccessPlain": "Ξεκλείδωμα ισόβιας πρόσβασης",
+    "storeUnavailable": "Το κατάστημα δεν είναι προσβάσιμο αυτή τη στιγμή. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+    "purchaseFailed": "Η αγορά δεν ολοκληρώθηκε. Δεν χρεωθήκατε.",
+    "termsOfUse": "Όροι χρήσης",
+    "privacyPolicy": "Πολιτική απορρήτου",
+    "restorePurchases": "Επαναφορά αγορών",
+    "oneTimePayment": "Εφάπαξ πληρωμή. Καμία ανανέωση.",
+    "cancel": "Άκυρο",
+    "back": "Πίσω",
+    "error": "Σφάλμα",
+    "appName": "ScribeZero",
+    "transcriptTitle": "Απομαγνητοφώνηση",
+    "importTitle": "Εισαγωγή ήχου",
+    "paywallTitle": "ScribeZero Pro",
+    "heroBadge": "Αναγνώριση ομιλίας στη συσκευή",
+    "heroTitle": "Απομαγνητοφώνηση στη συσκευή",
+    "heroSubtitle": "Μετατρέψτε ηχητικά σημειώματα και διαλέξεις σε κείμενο σε αυτή τη συσκευή. Μετά από μία λήψη μοντέλου, όλα λειτουργούν εκτός σύνδεσης.",
+    "tapToStop": "Πατήστε για διακοπή και αποθήκευση",
+    "tapToStart": "Πατήστε για έναρξη εγγραφής",
+    "importAudioPrompt": "Εισαγωγή εξωτερικού ήχου",
+    "importAudioDesc": "Απομαγνητοφώνηση αρχείων .mp3, .m4a ή .wav",
+    "voiceMemos": "Ηχητικά σημειώματα ({count})",
+    "voiceMemoDefault": "Ηχητικό σημείωμα #{number}",
+    "transcribe": "Απομαγνητοφώνηση",
+    "noVoiceMemos": "Δεν έχετε ηχογραφήσει ακόμη. Πατήστε το μικρόφωνο για εγγραφή.",
+    "micPermission": "Δεν δόθηκε άδεια",
+    "micPermissionDesc": "Παραχωρήστε πρόσβαση στο μικρόφωνο για εγγραφή ήχου.",
+    "transcriptionFailed": "Η απομαγνητοφώνηση απέτυχε.",
+    "localMl": "Τοπική μηχανική μάθηση",
+    "neuralEngine": "Τοπική εκτέλεση whisper.cpp",
+    "neuralEngineDesc": "Εκτελεί κβαντισμένα βάρη whisper.cpp σε αυτή τη συσκευή. Ο ήχος σας δεν ανεβαίνει ποτέ και δεν καταναλώνονται πιστώσεις cloud.",
+    "zeroServerUploads": "Καμία αποστολή σε διακομιστή",
+    "zeroServerUploadsDesc": "Εμπιστευτικές συσκέψεις, συνεντεύξεις και ιδέες παραμένουν στον ιδιωτικό αποθηκευτικό χώρο της εφαρμογής.",
+    "importAudioTitle": "Εισαγωγή εξωτερικού ήχου",
+    "importAudioLongDesc": "Υποστηρίζει αρχεία .mp3, .m4a και .wav. Επεξεργαστείτε διαλέξεις, ήχο συσκέψεων και podcast εκτός σύνδεσης.",
+    "transcribingWhisper": "Απομαγνητοφώνηση με μοντέλο Whisper",
+    "transcribingWhisperDesc": "Επεξεργασία μονοφωνικού ήχου 16 kHz στο υλικό της συσκευής σας...",
+    "proFeature": "Λειτουργία Pro",
+    "proFeatureDesc": "Η εισαγωγή εξωτερικού ήχου απαιτεί ScribeZero Pro.",
+    "unlockPro": "Ξεκλείδωμα — {price}",
+    "selectAudioFile": "Επιλογή αρχείου ήχου",
+    "importedAudio": "Εισαγόμενος ήχος",
+    "importError": "Σφάλμα εισαγωγής",
+    "importErrorDesc": "Δεν ήταν δυνατή η ανάγνωση του εξωτερικού αρχείου ήχου.",
+    "modelWhisper": "Μοντέλο: {model} • 100% στη συσκευή",
+    "copy": "Αντιγραφή",
+    "copied": "Αντιγράφηκε",
+    "exportError": "Σφάλμα εξαγωγής",
+    "exportSrtError": "Η δημιουργία υποτίτλων SRT απέτυχε.",
+    "exportMdError": "Η δημιουργία εγγράφου Markdown απέτυχε.",
+    "exportTxtError": "Η εξαγωγή απλού κειμένου απέτυχε.",
+    "antiSubTitle": "Η δέσμευσή μας: καμία συνδρομή",
+    "antiSubHeadline": "Καμία συνδρομή. Κανένας λογαριασμός. Πλήρης ιδιωτικότητα στη συσκευή. Δικό σας για πάντα.",
+    "antiSubDesc": "Άλλες εφαρμογές χρεώνουν $15–$30 τον μήνα για πιστώσεις cloud. Το ScribeZero εκτελείται εξ ολοκλήρου στο τηλέφωνό σας, με μία εφάπαξ αγορά.",
+    "feat1Title": "Απεριόριστη διάρκεια εγγραφής",
+    "feat1Desc": "Απομαγνητοφωνήστε διαλέξεις μιας ώρας, συσκέψεις και μεγάλες συνεντεύξεις χωρίς χρονικό όριο.",
+    "feat2Title": "Εισαγωγή αρχείων ήχου",
+    "feat2Desc": "Απομαγνητοφωνήστε εξωτερικά αρχεία ήχου (.mp3, .m4a, .wav) από οποιαδήποτε εφαρμογή.",
+    "feat3Title": "Υπότιτλοι SRT και εξαγωγή Markdown",
+    "feat3Desc": "Εξάγετε χρονισμένους υπότιτλους SubRip (.srt) και μορφοποιημένες σημειώσεις Markdown.",
+    "feat4Title": "Πλήρως ιδιωτικό στη συσκευή",
+    "feat4Desc": "Το Whisper εκτελείται στο υλικό του τηλεφώνου σας. Κανένα ηχητικό δεδομένο δεν ανεβαίνει ποτέ.",
+    "purchaseError": "Η αγορά ακυρώθηκε ή δεν ολοκληρώθηκε.",
+    "unexpectedError": "Παρουσιάστηκε απροσδόκητο σφάλμα πληρωμής.",
+    "noPriorPurchases": "Δεν βρέθηκαν προηγούμενες αγορές για επαναφορά.",
+    "restoreError": "Η επαναφορά των αγορών απέτυχε."
   }
 } as const;
 
@@ -982,12 +1140,37 @@ export function getLanguage(): SupportedLanguage {
 }
 
 export function isRTL(): boolean {
-  return currentLanguage === 'ar';
+  return currentLanguage === 'ar' || currentLanguage === 'fa';
+}
+
+/**
+ * CLDR plural category for `count` in the active language, e.g. "one" or
+ * "other" in English, which also has "few"/"many" in Russian and Arabic.
+ *
+ * Falls back to an English-style one/other split where Intl.PluralRules is
+ * unavailable, which is still better than always rendering the plural form.
+ */
+function pluralCategory(count: number): string {
+  try {
+    return new Intl.PluralRules(currentLanguage).select(count);
+  } catch {
+    return count === 1 ? 'one' : 'other';
+  }
 }
 
 export function t(key: TranslationKey, params?: Record<string, string | number>): string {
   const langDict = (translations as any)[currentLanguage] || translations.en;
-  let text: string = langDict[key] || translations.en[key] || (key as string);
+  // A key may carry plural variants as suffixed siblings ("exportClips_one").
+  // Only keys that actually define one are affected; everything else resolves
+  // to the base key exactly as before.
+  let resolved: string = key as string;
+  if (params && typeof params.count === 'number') {
+    const variant = `${key}_${pluralCategory(params.count)}`;
+    if (langDict[variant] || (translations.en as any)[variant]) resolved = variant;
+  }
+  let text: string =
+    langDict[resolved] || (translations.en as any)[resolved] ||
+    langDict[key] || translations.en[key] || (key as string);
   if (params) {
     Object.entries(params).forEach(([k, v]) => {
       text = text.split('{' + k + '}').join(String(v));
