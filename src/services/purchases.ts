@@ -12,10 +12,8 @@ import Purchases, { PurchasesPackage, LOG_LEVEL } from "react-native-purchases";
 const ENTITLEMENT_ID = "remove_ads";
 
 const RC_API_KEY = Platform.select({
-  ios: process.env.EXPO_PUBLIC_RC_IOS_KEY || "appl_zSGWXygELiWXWlqxvfONruWRjSs",
-  android:
-    process.env.EXPO_PUBLIC_RC_ANDROID_KEY ||
-    "goog_OCQCnAAUgWFAOYNKzjTaBgSvLbM",
+  ios: process.env.EXPO_PUBLIC_RC_IOS_KEY,
+  android: process.env.EXPO_PUBLIC_RC_ANDROID_KEY,
 });
 
 /**
