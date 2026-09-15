@@ -9,6 +9,42 @@
  */
 import { missingReleaseConfigFrom, RELEASE_ENV_KEYS } from '../src/config/releaseConfig';
 
+/**
+ * Refuses a second place that decides what an identifier is called.
+ *
+ * `src/config/env.ts` is the only file allowed to read `process.env` for a release identifier.
+ * When `purchases.ts` read `EXPO_PUBLIC_RC_*` directly while CI injected the canonical
+ * `EXPO_PUBLIC_REVENUECAT_*`, RevenueCat was configured with `undefined` in every CI build --
+ * every gate stayed green and no purchase could ever complete. One reader, checked here.
+ */
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+
+const ROOT = new URL('..', import.meta.url).pathname;
+const ALLOWED = ['src/config/env.ts', 'src/config/releaseConfig.ts'];
+
+function sourceFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const full = join(dir, name);
+    if (name === 'node_modules' || name.startsWith('.')) return [];
+    if (statSync(full).isDirectory()) return sourceFiles(full);
+    return /\.tsx?$/.test(name) ? [full] : [];
+  });
+}
+
+const strays = sourceFiles(join(ROOT, 'src'))
+  .concat(sourceFiles(join(ROOT, 'app')))
+  .map((f) => relative(ROOT, f))
+  .filter((f) => !ALLOWED.includes(f))
+  .filter((f) => /process\.env\.EXPO_PUBLIC_(ADMOB|REVENUECAT|RC)_/.test(readFileSync(join(ROOT, f), 'utf8')));
+
+if (strays.length > 0) {
+  console.error('\n\u2717 A release identifier is read outside src/config/env.ts:\n');
+  strays.forEach((f) => console.error(`    ${f}`));
+  console.error('\nImport it from src/config/env.ts instead, so one file names every key.\n');
+  process.exit(1);
+}
+
 const missing = missingReleaseConfigFrom(process.env);
 
 if (missing.length === 0) {

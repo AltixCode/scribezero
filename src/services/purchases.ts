@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { REVENUECAT_API_KEY } from '../config/env';
 import Purchases, { PurchasesPackage, LOG_LEVEL } from "react-native-purchases";
 
 /**
@@ -11,10 +11,14 @@ import Purchases, { PurchasesPackage, LOG_LEVEL } from "react-native-purchases";
  */
 const ENTITLEMENT_ID = "remove_ads";
 
-const RC_API_KEY = Platform.select({
-  ios: process.env.EXPO_PUBLIC_RC_IOS_KEY,
-  android: process.env.EXPO_PUBLIC_RC_ANDROID_KEY,
-});
+/**
+ * The RevenueCat public SDK key, resolved by `config/env` so that the key lives in the build
+ * environment and nowhere else. Reading `process.env` here instead would have meant two
+ * places that decide what a key is called, and they had already drifted apart: this file read
+ * `EXPO_PUBLIC_RC_*` while CI injects `EXPO_PUBLIC_REVENUECAT_*`, so a CI build configured
+ * RevenueCat with nothing and every purchase failed silently.
+ */
+const RC_API_KEY = REVENUECAT_API_KEY;
 
 /**
  * Why the outcome is a tagged union rather than a boolean: a boolean cannot
