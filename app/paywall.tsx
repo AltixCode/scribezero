@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator,
 import { useRouter } from 'expo-router';
 import {
   Sparkles,
+  BadgeCheck,
   Infinity as InfinityIcon,
   FileAudio,
   FileText,
@@ -25,6 +26,13 @@ export default function PaywallScreen() {
     usePaywall(() => router.back());
 
   const features = [
+    // Ad removal leads the list: it is what the store product is named after, and it is the
+    // benefit a free user has been feeling rather than reading about.
+    {
+      icon: <BadgeCheck size={20} color={theme.primary} />,
+      title: t('featAdsTitle'),
+      desc: t('featAdsDesc'),
+    },
     {
       icon: <InfinityIcon size={20} color={theme.accent} />,
       title: t('feat1Title'),

@@ -20,6 +20,9 @@ import { TranscriptSegmentCard } from '../src/components/TranscriptSegmentCard';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
 import { t } from '../src/i18n';
+import { useAdsStore } from '../src/store/adsStore';
+import { showInterstitial } from '../src/services/ads';
+import { shouldShowInterstitial } from '../src/services/adPolicy';
 
 export default function TranscriptScreen() {
   const router = useRouter();
@@ -72,12 +75,30 @@ export default function TranscriptScreen() {
     }
   };
 
+  const maybeShowInterstitial = async () => {
+    const { completions, lastInterstitialAt, markInterstitialShown } = useAdsStore.getState();
+    const decision = shouldShowInterstitial({
+      completions,
+      lastInterstitialAt,
+      now: Date.now(),
+      // Read at call time rather than captured: the user may have bought the upgrade from the
+      // paywall between opening this screen and finishing the work.
+      isPro: useAudioStore.getState().isPro,
+    });
+    if (!decision) return;
+    // Only a shown-and-dismissed ad resets the clock. Counting an unfilled request would
+    // suppress the next several ads for nothing.
+    if (await showInterstitial()) await markInterstitialShown();
+  };
+
   const handleExportText = async () => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       const path = await saveTranscriptFile('transcript.txt', currentTranscript.fullText);
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(path);
+        // Behind the share sheet: the transcript has left the app by the time the ad appears.
+        await maybeShowInterstitial();
       }
     } catch {
       Alert.alert(t('exportError'), t('exportTxtError'));
