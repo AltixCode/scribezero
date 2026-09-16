@@ -19,6 +19,7 @@ import {
 import { TranscriptSegmentCard } from '../src/components/TranscriptSegmentCard';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { t } from '../src/i18n';
 import { useAdsStore } from '../src/store/adsStore';
 import { showInterstitial } from '../src/services/ads';
@@ -27,6 +28,7 @@ import { shouldShowInterstitial } from '../src/services/adPolicy';
 export default function TranscriptScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const { currentTranscript, activeRecordingTitle, isPro } = useAudioStore();
 
   const [copied, setCopied] = useState(false);
@@ -205,7 +207,7 @@ export default function TranscriptScreen() {
       </View>
 
       {/* Timestamped Segments List */}
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 36 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 36 , ...tabletColumn}}>
         {currentTranscript.segments.map((seg) => (
           <TranscriptSegmentCard key={seg.id} segment={seg} />
         ))}
