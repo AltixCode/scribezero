@@ -19,6 +19,7 @@ import { transcribeAudio } from '../src/engine/whisperEngine';
 import { WaveformVisualizer } from '../src/components/WaveformVisualizer';
 import { PaywallModal } from '../src/components/PaywallModal';
 import { useTheme } from '../src/theme/useTheme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 import { ModelGate } from '../src/components/ModelGate';
 import { getModelStatus } from '../src/services/modelManager';
 import { ModelMissingError } from '../src/engine/whisperEngine';
@@ -41,6 +42,7 @@ export default function HomeScreen() {
   const offerPrivacyOptions = useAdsStore((state) => state.consent.offerPrivacyOptions);
   const router = useRouter();
   const theme = useTheme();
+  const tabletColumn = useTabletColumn();
   const {
     isRecording,
     recordingDuration,
@@ -158,7 +160,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background }} className="px-5">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 , ...tabletColumn}}>
         {/* Hero Section */}
         <View className="mt-4 mb-4">
           <View
