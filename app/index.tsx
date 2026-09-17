@@ -160,7 +160,18 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: theme.background }} className="px-5">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 , ...tabletColumn}}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{
+          paddingBottom: 32,
+          ...tabletColumn,
+          // A fixed block -- the recorder, the import row, the memo list and
+          // two claims -- rather than a list that grows, so it is centred when
+          // there is slack. On a 13" iPad it left nearly 40% of the display
+          // empty beneath it. The memo list does grow, but it is one section
+          // inside the block, and once it is long enough to fill the viewport
+          // this has no slack to use and behaves exactly as before.
+          flexGrow: 1,
+          justifyContent: 'center',
+        }}>
         {/* Hero Section */}
         <View className="mt-4 mb-4">
           <View
