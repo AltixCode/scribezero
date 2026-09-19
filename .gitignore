@@ -47,3 +47,7 @@ build/
 .env
 .env.local
 .env.*.local
+
+# gstack skill is installed as its own git checkout, which git tracks as an
+# embedded repo (gitlink) that's always dirty relative to its own HEAD
+.claude/skills/gstack/
